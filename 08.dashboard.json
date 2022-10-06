@@ -1,0 +1,130 @@
+{
+    "access": "proxy",
+    "jsonData": {
+      "httpMethod": "POST"
+    },
+    "name": "Prometheus",
+    "type": "prometheus",
+    "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+    "typeName": "Prometheus",
+    "url": "http://13.78.205.54:9090"
+  }'
+ Visualizing the data
+ Grafana data sources can be linked in dashboards to give you a visualization of your data. These dashboards can implement interactive panels and rows that pull the data in real time or allows you to browse the historical data to investigate an old issue.
+ 
+ Use the following command to create a visualization and link it to your data source.
+ az grafana dashboard create -g calico-aks-monitoring -n managed-grafana --title "Calico IPAM Dashboard" --definition '{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 12,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "9.0.8.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum by(ippool) (ipam_allocations_in_use)*100/sum by(ippool) (ipam_ippool_size)",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Calico IPAM Usage",
+      "type": "gauge"
+    }
+  ],
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "My Calico IPAM dashboard",
+  "version": 1,
+  "weekStart": ""
+ }
+ 
